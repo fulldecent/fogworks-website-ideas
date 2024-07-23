@@ -1,12 +1,3 @@
-## TODO
-
-- [ ] maybe add lighthouse validation checking
-
-  - <https://developer.chrome.com/docs/lighthouse/overview/>
-  - <https://github.com/GoogleChrome/lighthouse-ci>
-
----
-
 ## How to run this application locally
 
 ### Setup environment
@@ -46,14 +37,6 @@ bundle exec jekyll build
 
 ```sh
 bundle exec jekyll serve
-```
-
-### (Bonus) if you will build using Jekyll but deploy to a different server with a script interpreter
-
-You can run PHP or similar on the built site. Here's how.
-
-```sh
-(cd build; php -S localhost:4001)
 ```
 
 ### Testing

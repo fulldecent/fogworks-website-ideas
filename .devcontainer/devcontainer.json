@@ -1,0 +1,21 @@
+// Documentation:
+//  - https://github.com/devcontainers/images/tree/main/src/jekyll
+//  - https://github.com/devcontainers/features/tree/main/src/node
+//  - https://github.com/devcontainers/features/tree/main/src/php
+//  - https://code.visualstudio.com/docs/remote/ssh#_always-installed-extensions
+
+{
+    "name": "Jekyll",
+    "image": "mcr.microsoft.com/devcontainers/jekyll",
+    "features": {
+        // Install latest stable Node (we use for validation scripts after build)
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": ["html-validate.vscode-html-validate"]
+        }
+    }
+}

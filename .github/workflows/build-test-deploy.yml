@@ -24,7 +24,7 @@ jobs:
     name: Jekyll build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup Ruby # See https://www.ruby-lang.org/en/downloads/branches/
         uses: ruby/setup-ruby@v1
         with:
@@ -33,11 +33,13 @@ jobs:
       - name: Build site
         run: bundle exec jekyll build
       - name: Upload build artifact, ready for GitHub Pages deployment
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: build/
+          # v3 packed top-level dotfiles. v4 and later omit them unless this is set.
+          include-hidden-files: true
       - name: Upload build artifact, ready for testing
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifact
           path: build/ # or the path to your Jekyll build directory
@@ -48,28 +50,33 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "lts/*"
           cache: "yarn"
       - name: Install node packages
         run: yarn install --immutable
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifact
           path: build/
-      - name: Cache testing
-        uses: actions/cache@v4
+      - name: Restore testing cache
+        uses: actions/cache/restore@v6
         id: cache
         with:
           path: cache/
           key: ${{ runner.os }}-testing
-          save-always: true
       - name: Test suite
         run: yarn run test
+      - name: Save testing cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: cache/
+          key: ${{ runner.os }}-testing
 
   # Deploy the GitHub Pages artifact
   deploy-github-pages:
@@ -83,4 +90,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
